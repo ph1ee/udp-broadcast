@@ -36,10 +36,11 @@ static void displayError(const char *on_what) {
 int main(int argc, char **argv) {
   int z;
   int x;
-  struct sockaddr_in adr; /* AF_INET */
-  int len_inet;           /* length */
-  int s;                  /* Socket */
-  char dgram[512];        /* Recv buffer */
+  struct sockaddr_in adr_bc;   /* AF_INET */
+  struct sockaddr_in adr_srvr; /* AF_INET */
+  int len_bc;                  /* length */
+  int s;                       /* Socket */
+  char dgram[512];             /* Recv buffer */
   static int so_reuseaddr = TRUE;
   static char *bc_addr = "127.255.255.2:9097";
 
@@ -60,9 +61,9 @@ int main(int argc, char **argv) {
   /*
    * Form the broadcast address:
    */
-  len_inet = sizeof(adr);
+  len_bc = sizeof(adr_bc);
 
-  z = mkaddr(&adr, &len_inet, bc_addr, "udp");
+  z = mkaddr(&adr_bc, &len_bc, bc_addr, "udp");
 
   if (z == -1) displayError("Bad broadcast address");
 
@@ -77,7 +78,7 @@ int main(int argc, char **argv) {
   /*
    * Bind our socket to the broadcast address:
    */
-  z = bind(s, (struct sockaddr *)&adr, len_inet);
+  z = bind(s, (struct sockaddr *)&adr_bc, len_bc);
 
   if (z == -1) displayError("bind(2)");
 
@@ -85,14 +86,21 @@ int main(int argc, char **argv) {
     /*
      * Wait for a broadcast message:
      */
-    z = recvfrom(s,                       /* Socket */
-                 dgram,                   /* Receiving buffer */
-                 sizeof(dgram),           /* Max rcv buf size */
-                 0,                       /* Flags: no options */
-                 (struct sockaddr *)&adr, /* Addr */
-                 &x);                     /* Addr len, in & out */
+    z = recvfrom(s,                            /* Socket */
+                 dgram,                        /* Receiving buffer */
+                 sizeof(dgram),                /* Max rcv buf size */
+                 0,                            /* Flags: no options */
+                 (struct sockaddr *)&adr_srvr, /* Addr */
+                 &x);                          /* Addr len, in & out */
 
-    if (z < 0) displayError("recvfrom(2)"); /* else err */
+    if (z == -1) displayError("recvfrom(2)"); /* else err */
+
+    char from[INET_ADDRSTRLEN], to[INET_ADDRSTRLEN];
+    printf(">> %s:%d -> %s:%d\n",
+           inet_ntop(AF_INET, &adr_srvr.sin_addr, from, x),
+           ntohs(adr_srvr.sin_port),
+           inet_ntop(AF_INET, &adr_bc.sin_addr, to, len_bc),
+           ntohs(adr_bc.sin_port));
 
     fwrite(dgram, z, 1, stdout);
     putchar('\n');
