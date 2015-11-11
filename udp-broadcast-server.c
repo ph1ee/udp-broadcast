@@ -21,6 +21,7 @@
 extern int mkaddr(void *addr, int *addrlen, char *str_addr, char *protocol);
 
 #define MAXQ 4
+#define INTERVAL 4
 
 static struct {
   char *index;
@@ -104,7 +105,7 @@ int main(int argc, char **argv) {
   /*
    * Form the server address:
    */
-  len_srvr = sizeof adr_srvr;
+  len_srvr = sizeof(adr_srvr);
 
   z = mkaddr(&adr_srvr, /* Returned address */
              &len_srvr, /* Returned length */
@@ -116,7 +117,7 @@ int main(int argc, char **argv) {
   /*
    * Form the broadcast address:
    */
-  len_bc = sizeof adr_bc;
+  len_bc = sizeof(adr_bc);
 
   z = mkaddr(&adr_bc, /* Returned address */
              &len_bc, /* Returned length */
@@ -135,7 +136,7 @@ int main(int argc, char **argv) {
    * Allow broadcasts:
    */
   z = setsockopt(s, SOL_SOCKET, SO_BROADCAST, &so_broadcast,
-                 sizeof so_broadcast);
+                 sizeof(so_broadcast));
 
   if (z == -1) displayError("setsockopt(SO_BROADCAST)");
 
@@ -176,7 +177,7 @@ int main(int argc, char **argv) {
 
     if (z == -1) displayError("sendto()");
 
-    sleep(4);
+    sleep(INTERVAL);
   }
 
   return 0;

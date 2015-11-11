@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
   /*
    * Form the broadcast address:
    */
-  len_inet = sizeof adr;
+  len_inet = sizeof(adr);
 
   z = mkaddr(&adr, &len_inet, bc_addr, "udp");
 
@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
    * Allow multiple listeners on the broadcast address:
    */
   z = setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &so_reuseaddr,
-                 sizeof so_reuseaddr);
+                 sizeof(so_reuseaddr));
 
   if (z == -1) displayError("setsockopt(SO_REUSEADDR)");
 
@@ -87,7 +87,7 @@ int main(int argc, char **argv) {
      */
     z = recvfrom(s,                       /* Socket */
                  dgram,                   /* Receiving buffer */
-                 sizeof dgram,            /* Max rcv buf size */
+                 sizeof(dgram),           /* Max rcv buf size */
                  0,                       /* Flags: no options */
                  (struct sockaddr *)&adr, /* Addr */
                  &x);                     /* Addr len, in & out */

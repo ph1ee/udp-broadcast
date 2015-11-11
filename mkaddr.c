@@ -132,7 +132,7 @@ int mkaddr(void *addr, int *addrlen, char *str_addr, char *protocol) {
   /*
    * Return address length
    */
-  *addrlen = sizeof *ap;
+  *addrlen = sizeof(*ap);
 
   free(inp_addr);
   return 0;
