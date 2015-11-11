@@ -13,6 +13,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <limits.h>
 
 /*
  * Create an AF_INET Address:
@@ -110,11 +111,11 @@ int mkaddr(void *addr, int *addrlen, char *str_addr, char *protocol) {
     /*
      * Process numeric port #:
      */
-    lv = strtol(port_part, &cp, 10);
+    lv = strtol(port_part, &cp, 0);
     if (cp != NULL && *cp) {
       return -2;
     }
-    if (lv < 0L || lv >= 32768) {
+    if (lv < 0L || lv > USHRT_MAX) {
       return -2;
     }
     ap->sin_port = htons((short)lv);
