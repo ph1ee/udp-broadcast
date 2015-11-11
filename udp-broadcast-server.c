@@ -177,6 +177,13 @@ int main(int argc, char **argv) {
 
     if (z == -1) displayError("sendto()");
 
+    char from[INET_ADDRSTRLEN], to[INET_ADDRSTRLEN];
+    printf(">> %s:%d -> %s:%d\n",
+           inet_ntop(AF_INET, &adr_srvr.sin_addr, from, len_srvr),
+           ntohs(adr_srvr.sin_port),
+           inet_ntop(AF_INET, &adr_bc.sin_addr, to, len_bc),
+           ntohs(adr_bc.sin_port));
+
     sleep(INTERVAL);
   }
 
