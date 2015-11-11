@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
 
   z = mkaddr(&adr_bc, &len_bc, bc_addr, "udp");
 
-  if (z == -1) displayError("Bad broadcast address");
+  if (z < 0) displayError("Bad broadcast address");
 
   /*
    * Allow multiple listeners on the broadcast address:

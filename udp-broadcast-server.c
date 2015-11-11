@@ -112,7 +112,7 @@ int main(int argc, char **argv) {
              sv_addr,   /* Input string addr */
              "udp");    /* UDP protocol */
 
-  if (z == -1) displayError("Bad server address");
+  if (z < 0) displayError("Bad server address");
 
   /*
    * Form the broadcast address:
@@ -124,7 +124,7 @@ int main(int argc, char **argv) {
              bc_addr, /* Input string addr */
              "udp");  /* UDP protocol */
 
-  if (z == -1) displayError("Bad broadcast address");
+  if (z < 0) displayError("Bad broadcast address");
 
   /*
    * Create a UDP socket to use:
