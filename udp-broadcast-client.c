@@ -86,6 +86,7 @@ int main(int argc, char **argv) {
     /*
      * Wait for a broadcast message:
      */
+    x = sizeof(adr_srvr);
     z = recvfrom(s,                            /* Socket */
                  dgram,                        /* Receiving buffer */
                  sizeof(dgram),                /* Max rcv buf size */
